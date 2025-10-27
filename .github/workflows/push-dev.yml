@@ -33,7 +33,7 @@ jobs:
       run: flake8 .
 
     - name: Run all tests
-      run: pytest -v --cov=app
+      run: pytest -v
 
   build-docker:
     name: Build Docker Image
@@ -55,3 +55,4 @@ jobs:
     - name: Test Docker image
       run: |
         docker run --rm -e USER_NAME=TestUser -e API_TOKEN=test123 my_project:dev-latest
+

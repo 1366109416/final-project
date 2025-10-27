@@ -38,21 +38,9 @@ jobs:
     - name: Run linting with Flake8
       run: flake8 .
 
-    - name: Debug - Show project structure
-      run: |
-        echo "Project structure:"
-        find . -name "*.py" -type f | grep -E "(test_|_test\.py|conftest\.py)" || echo "No test files found"
-        echo "Tests directory:"
-        ls -la tests/ || echo "No tests directory"
-
-    - name: Debug - Check pytest discovery
-      run: |
-        python -c "import sys; print('Python path:', sys.path)"
-        pytest --collect-only -q || echo "Pytest collection failed"
-
     - name: Run tests with detailed output
       run: |
-        pytest -v --tb=short --cov=app
+        pytest -v --tb=short
 
     - name: Check for merge conflicts with dev
       run: |
@@ -60,10 +48,10 @@ jobs:
         git checkout dev
         git checkout - || true
         if git merge origin/${{ github.ref_name }} --no-commit --no-ff; then
-          echo "✅ No merge conflicts with dev branch"
+          echo "鉁?No merge conflicts with dev branch"
           git merge --abort 2>/dev/null || true
         else
-          echo "❌ Merge conflicts detected with dev branch"
+          echo "鉂?Merge conflicts detected with dev branch"
           git merge --abort 2>/dev/null || true
           exit 1
         fi
@@ -71,4 +59,4 @@ jobs:
     - name: Notify on success
       if: success()
       run: |
-        echo "✅ Feature branch validation passed! Ready for PR to dev."
+        echo "鉁?Feature branch validation passed! Ready for PR to dev."

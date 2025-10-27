@@ -47,3 +47,4 @@ jobs:
         else
           echo "鉁?Branch name follows naming convention"
         fi
+
