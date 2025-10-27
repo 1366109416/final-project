@@ -1,0 +1,50 @@
+﻿name: Pull Request to Dev
+
+on:
+  pull_request:
+    branches: [ dev ]
+
+env:
+  PYTHON_VERSION: '3.10'
+
+jobs:
+  validate-pr:
+    name: Validate Pull Request to Dev
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Check code formatting with Black
+      run: black --check .
+
+    - name: Run linting with Flake8
+      run: flake8 .
+
+    - name: Run tests
+      run: pytest -v --cov=app
+
+    - name: Check branch naming convention
+      run: |
+        BRANCH_NAME="${{ github.head_ref }}"
+        if [[ ! $BRANCH_NAME =~ ^(feature/|feat/|peat[0-9]+|fix/|bugfix/|hotfix/|release/).* ]]; then
+          echo "鉂?Branch name does not follow naming convention"
+          exit 1
+        else
+          echo "鉁?Branch name follows naming convention"
+        fi
+
