@@ -1,0 +1,23 @@
+[tool.black]
+line-length = 88
+target-version = ['py310']
+include = '\.pyi?$'
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "my_project"
+version = "0.1.0"
+description = "A simple Python application with best practices"
+requires-python = ">=3.10"
+dependencies = [
+    "python-dotenv>=1.0.0",
+]

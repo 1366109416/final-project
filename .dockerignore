@@ -1,0 +1,45 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# Environment variables (will be injected at runtime)
+.env
+.env.local
+
+# Testing
+tests/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Documentation
+*.md
+README.md
+LICENSE
+
+# CI/CD
+.github/
+
+# OS
+.DS_Store
+Thumbs.db
