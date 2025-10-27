@@ -9,7 +9,7 @@ import sys
 def check_file_syntax(filepath):
     """检查单个文件的语法"""
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, "r", encoding="utf-8") as f:
             content = f.read()
         ast.parse(content)
         print(f"✓ {filepath}: 语法正确")
@@ -25,9 +25,9 @@ def check_file_syntax(filepath):
 def main():
     """主函数"""
     python_files = []
-    for root, dirs, files in os.walk('.'):
+    for root, dirs, files in os.walk("."):
         for file in files:
-            if file.endswith('.py'):
+            if file.endswith(".py"):
                 python_files.append(os.path.join(root, file))
 
     print(f"找到 {len(python_files)} 个Python文件")
@@ -45,5 +45,5 @@ def main():
         return 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

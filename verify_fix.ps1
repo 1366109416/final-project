@@ -1,37 +1,41 @@
-#!/bin/bash
-# verify_fix.sh - 验证所有修复
+# verify_fix.ps1 - 验证所有修复
 
-echo "🔍 验证修复结果..."
+Write-Host "Verifying All Fixes..." -ForegroundColor Green
 
-# 1. 检查Black格式
-echo "✅ 检查Black格式..."
-if black --check .; then
-    echo "🎉 Black检查通过！"
-else
-    echo "❌ Black检查失败，请运行: black ."
+# 1. 检查 Black 格式化
+Write-Host "`n1. Checking Black formatting..." -ForegroundColor Yellow
+black --check .
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "  ✓ Black formatting check passed" -ForegroundColor Green
+} else {
+    Write-Host "  ✗ Black formatting check failed" -ForegroundColor Red
+    Write-Host "  Running black to see differences:" -ForegroundColor Yellow
+    black --check . --diff
     exit 1
-fi
+}
 
-# 2. 检查Python语法
-echo "✅ 检查Python语法..."
-for file in $(find . -name "*.py"); do
-    if python -m py_compile "$file"; then
-        echo "✓ $file 语法正确"
-    else
-        echo "✗ $file 语法错误"
-        exit 1
-    fi
-done
+# 2. 检查 Flake8
+Write-Host "`n2. Checking Flake8..." -ForegroundColor Yellow
+flake8 . --statistics
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "  ✓ Flake8 check passed" -ForegroundColor Green
+} else {
+    Write-Host "  ✗ Flake8 check failed" -ForegroundColor Red
+    exit 1
+}
 
 # 3. 运行测试
-echo "✅ 运行测试..."
-if pytest -v; then
-    echo "🎉 所有测试通过！"
-else
-    echo "❌ 测试失败"
+Write-Host "`n3. Running tests..." -ForegroundColor Yellow
+pytest -v
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "  ✓ All tests passed" -ForegroundColor Green
+} else {
+    Write-Host "  ✗ Some tests failed" -ForegroundColor Red
     exit 1
-fi
+}
 
-echo ""
-echo "🎊 所有检查通过！代码现在符合Black格式要求。"
-echo "🚀 可以安全地推送到GitHub了。"
+# 4. 显示 Git 状态
+Write-Host "`n4. Git status:" -ForegroundColor Cyan
+git status
+
+Write-Host "`n🎉 All checks passed! Ready to commit and push." -ForegroundColor Green

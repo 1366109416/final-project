@@ -1,12 +1,6 @@
 ﻿"""Tests for the main application."""
 
-import os
-import sys
 import pytest
-
-# 添加项目根目录到 Python 路径
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from app.main import greet
 from app.utils import mask_secret, validate_env_var
 
@@ -15,7 +9,6 @@ def test_greet_with_env_vars(monkeypatch):
     """Test greet function with environment variables set."""
     monkeypatch.setenv("USER_NAME", "TestUser")
     monkeypatch.setenv("API_TOKEN", "1234567890abcdef")
-
     result = greet()
     assert "Hello TestUser" in result
     assert "1234***" in result
@@ -25,7 +18,6 @@ def test_greet_without_env_vars(monkeypatch):
     """Test greet function without environment variables."""
     monkeypatch.delenv("USER_NAME", raising=False)
     monkeypatch.delenv("API_TOKEN", raising=False)
-
     result = greet()
     assert "Anonymous" in result
 
@@ -58,6 +50,5 @@ def test_validate_env_var_with_default(monkeypatch):
 def test_validate_env_var_missing(monkeypatch):
     """Test validate_env_var raises error when variable is missing."""
     monkeypatch.delenv("REQUIRED_VAR", raising=False)
-
     with pytest.raises(ValueError, match="REQUIRED_VAR is required but not set"):
         validate_env_var("REQUIRED_VAR")
