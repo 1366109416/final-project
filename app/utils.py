@@ -1,4 +1,4 @@
-"""Utility functions for the application."""
+﻿"""Utility functions for the application."""
 
 import os
 

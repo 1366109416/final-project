@@ -1,6 +1,12 @@
-"""Tests for the main application."""
+﻿"""Tests for the main application."""
 
+import os
+import sys
 import pytest
+
+# 添加项目根目录到 Python 路径
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from app.main import greet
 from app.utils import mask_secret, validate_env_var
 
@@ -53,5 +59,5 @@ def test_validate_env_var_missing(monkeypatch):
     """Test validate_env_var raises error when variable is missing."""
     monkeypatch.delenv("REQUIRED_VAR", raising=False)
 
-    with pytest.raises(ValueError, match="REQUIRED_VAR is required"):
+    with pytest.raises(ValueError, match="REQUIRED_VAR is required but not set"):
         validate_env_var("REQUIRED_VAR")

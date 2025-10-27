@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """调试脚本来查看实际输出"""
 
+from app.new_feature import ConfigManager, display_configuration
+from app.main import greet, show_config
 import os
 import sys
 
@@ -8,8 +10,6 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 
 # 现在导入模块
-from app.main import greet, show_config
-from app.new_feature import ConfigManager, display_configuration
 
 # 设置测试环境变量
 os.environ["USER_NAME"] = "TestUser"

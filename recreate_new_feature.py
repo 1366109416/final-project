@@ -16,12 +16,12 @@ from app.utils import mask_secret, validate_env_var
 
 class ConfigManager:
     """Advanced configuration manager with validation and type conversion."""
-    
+
     def __init__(self, config_prefix: str = "APP_"):
         self.config_prefix = config_prefix
         self._config_cache = {}
         self._load_config()
-    
+
     def _load_config(self):
         """Load and validate all configuration variables."""
         self.user_name = validate_env_var("USER_NAME", "Anonymous")
@@ -30,14 +30,15 @@ class ConfigManager:
         self.max_retries = self._get_int("MAX_RETRIES", 3)
         self.timeout = self._get_float("TIMEOUT", 30.0)
         self.allowed_users = self._get_list("ALLOWED_USERS", [])
-        self.enable_advanced_features = self._get_bool("ENABLE_ADVANCED_FEATURES", False)
+        self.enable_advanced_features =
+        self._get_bool("ENABLE_ADVANCED_FEATURES", False)
         self.log_level = self._get_string("LOG_LEVEL", "INFO")
-    
+
     def _get_string(self, key, default=""):
         """Get string configuration value."""
         full_key = f"{self.config_prefix}{key}"
         return os.getenv(full_key, default)
-    
+
     def _get_bool(self, key, default=False):
         """Get boolean configuration value."""
         value = self._get_string(key, "").lower()
@@ -46,21 +47,21 @@ class ConfigManager:
         elif value in ("false", "0", "no", "off"):
             return False
         return default
-    
+
     def _get_int(self, key, default=0):
         """Get integer configuration value."""
         try:
             return int(self._get_string(key, str(default)))
         except (ValueError, TypeError):
             return default
-    
+
     def _get_float(self, key, default=0.0):
         """Get float configuration value."""
         try:
             return float(self._get_string(key, str(default)))
         except (ValueError, TypeError):
             return default
-    
+
     def _get_list(self, key, default=None):
         """Get list configuration value (comma-separated)."""
         if default is None:
@@ -69,27 +70,28 @@ class ConfigManager:
         if not value:
             return default
         return [item.strip() for item in value.split(",") if item.strip()]
-    
+
     def validate_configuration(self):
         """Validate all configuration and return any errors."""
         errors = {}
-        
+
         if not self.user_name or self.user_name == "Anonymous":
             errors["USER_NAME"] = "User name should be set to a specific value"
-        
+
         if not self.api_token:
             errors["API_TOKEN"] = "API token is required for application functionality"
-        
+
         if self.max_retries < 0 or self.max_retries > 10:
             errors["MAX_RETRIES"] = "Max retries should be between 0 and 10"
-        
+
         return errors
-    
+
     def get_config_summary(self, mask_sensitive=True):
         """Get a summary of all configuration values."""
         config = {
             "user_name": self.user_name,
-            "api_token": mask_secret(self.api_token, 4) if mask_sensitive else self.api_token,
+            "api_token": mask_secret(self.api_token, 4) if mask_sensitive
+            else self.api_token,
             "debug_mode": self.debug_mode,
             "max_retries": self.max_retries,
             "timeout": self.timeout,
@@ -98,7 +100,7 @@ class ConfigManager:
             "log_level": self.log_level,
         }
         return config
-    
+
     def reload_config(self):
         """Reload configuration from environment variables."""
         self._config_cache.clear()
@@ -109,28 +111,29 @@ def enhanced_greet(config_manager=None):
     """Enhanced greeting function with configuration validation."""
     if config_manager is None:
         config_manager = ConfigManager()
-    
+
     errors = config_manager.validate_configuration()
     base_greeting = f"Hello {config_manager.user_name}"
-    
+
     if errors:
         error_details = "; ".join([f"{k}: {v}" for k, v in errors.items()])
         return f"{base_greeting}! Configuration issues: {error_details}"
-    
+
     additional_info = []
-    
+
     if config_manager.debug_mode:
         additional_info.append("debug mode enabled")
-    
+
     if config_manager.enable_advanced_features:
         additional_info.append("advanced features active")
-    
+
     if config_manager.allowed_users:
-        additional_info.append(f"access granted for {len(config_manager.allowed_users)} users")
-    
+        additional_info.append(f"access granted for
+        {len(config_manager.allowed_users)} users")
+
     if additional_info:
         return f"{base_greeting}! Features: {', '.join(additional_info)}"
-    
+
     return f"{base_greeting}! Application is running with basic configuration."
 
 
@@ -138,32 +141,35 @@ def display_configuration():
     """Display current configuration in a formatted way."""
     config_manager = ConfigManager()
     config_summary = config_manager.get_config_summary()
-    
+
     config_lines = ["Current Configuration:"]
     config_lines.append("-" * 40)
-    
+
     for key, value in config_summary.items():
         formatted_key = key.replace("_", " ").title()
         config_lines.append(f"{formatted_key}: {value}")
-    
+
     config_lines.append("-" * 40)
-    
+
     return "\\n".join(config_lines)
 
 
 def validate_and_mask_secrets(config_data):
     """Validate configuration data and mask secrets for safe display."""
     masked_data = {}
-    
+
     for key, value in config_data.items():
-        if any(secret_term in key.lower() for secret_term in ["token", "password", "secret", "key"]):
+        if any(secret_term in key.lower() for secret_term in ["token",
+        "password",
+        "secret",
+        "key"]):
             if isinstance(value, str):
                 masked_data[key] = mask_secret(value, 4)
             else:
                 masked_data[key] = "***"
         else:
             masked_data[key] = value
-    
+
     return masked_data
 
 

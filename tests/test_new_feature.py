@@ -1,9 +1,6 @@
 """Tests for the new feature module."""
 
-import pytest
-import os
 from app.new_feature import ConfigManager, enhanced_greet, display_configuration
-from app.utils import mask_secret
 
 
 class TestConfigManager:
