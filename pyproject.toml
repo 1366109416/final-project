@@ -1,7 +1,8 @@
 [tool.black]
 line-length = 88
-target-version = ['py310']
-include = '\.pyi?$'
+target-version = ['py38']
+# 编码设置（如果版本支持）
+skip-string-normalization = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -12,6 +13,7 @@ python_functions = ["test_*"]
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
 
 [project]
 name = "my_project"

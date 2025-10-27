@@ -1,5 +1,7 @@
 """Utility functions for the application."""
 
+import os
+
 
 def mask_secret(secret, visible_chars=4):
     """Mask a secret string, showing only the first few characters.
@@ -25,9 +27,10 @@ def validate_env_var(var_name, default=None):
 
     Returns:
         Value of the environment variable or default
-    """
-    import os
 
+    Raises:
+        ValueError: If environment variable is required but not set
+    """
     value = os.getenv(var_name, default)
     if value is None:
         raise ValueError(f"Environment variable {var_name} is required but not set")

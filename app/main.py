@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+"""Main application module."""
+
 import os
 from dotenv import load_dotenv
 
